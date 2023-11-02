@@ -1,9 +1,12 @@
 # NEXT-training-projects
 
+* [Blog App](https://github.com/SKindij/NEXT-training-projects/tree/main/blog-app)
+
+
+
 > System Requirements: Node.js 18.17 or later.
 
 Automatic Installation: ``npx create-next-app@latest``
-
 ```go
   What is your project named? => my-next-app
   Would you like to use TypeScript? => Yes
