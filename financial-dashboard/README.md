@@ -109,6 +109,37 @@ The ``<Image>`` Component is an extension of the HTML ``<img>`` tag, and comes w
 
 ## Creating Layouts and Pages
 
+### Nested routing (Вкладена маршрутизація)
+
+Next.js uses file-system routing where folders are used to create nested routes. Each folder represents a route segment that maps to a URL segment.
+
+You can create separate UIs for each route using layout.tsx and page.tsx files.
+> `/app/page.tsx` - this is the home page associated with the route `/`\
+> `/app/dashboard/page.tsx` is associated with the `/dashboard path`\
+> `layout.tsx` file create UI that is shared between multiple pages
+
+One benefit of using layouts in Next.js is that on navigation, only the page components update while the layout won't re-render. This is called partial rendering.
+
+### Navigating Between Pages
+
+In Next.js, you can use the `<Link />` Component to link between pages in your application. `<Link>` allows you to do client-side navigation with JavaScript.
+
+You should be able to navigate between the pages without seeing a full refresh. 
+> _Although parts of your application are rendered on the server, there's no full page refresh, making it feel like a web app. _
+
+Futhermore, in production, whenever <Link> components appear in the browser's viewport, Next.js automatically prefetches the code for the linked route in the background. By the time the user clicks the link, the code for the destination page will already be loaded in the background, and this is what makes the page transition near-instant!
+
+#### Pattern: Showing active links
+
+A common UI pattern is to show an active link to indicate to the user what page they are currently on. To do this, you need to get the user's current path from the URL. Next.js provides a hook called `usePathname()` that you can use to check the path and implement this pattern.
+
+
+
+
+
+
+
+
 
 
 
