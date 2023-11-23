@@ -133,17 +133,21 @@ Futhermore, in production, whenever <Link> components appear in the browser's vi
 
 A common UI pattern is to show an active link to indicate to the user what page they are currently on. To do this, you need to get the user's current path from the URL. Next.js provides a hook called `usePathname()` that you can use to check the path and implement this pattern.
 
+> You can use the `clsx` library to conditionally apply class names when the link is active. When `link.href` matches the `pathname`, the link should displayed with blue text and a light blue background.
 
+## Create a Vercel account
 
+1. Visit [vercel.com/signup](https://vercel.com/signup) to create an account.
+2. Choose the free "hobby" plan.
+3. Select Continue with GitHub to connect your GitHub and Vercel accounts.
+4. Next select and import the GitHub repository.
+5. Name your project and click Deploy.
 
+Hooray! 🎉 Your project is now deployed.
 
+> By connecting your GitHub repository, whenever you push changes to your main branch, Vercel will automatically redeploy your application with no configuration needed. 
 
-
-
-
-
-
-
+## Create a Postgres database
 
 
 
