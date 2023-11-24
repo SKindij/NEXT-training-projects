@@ -190,6 +190,59 @@ There are a few reasons why we'll be using SQL:
 + SQL is versatile, allowing you to fetch and manipulate specific data.
 + The [Vercel Postgres SDK](https://vercel.com/docs/storage/vercel-postgres/sdk) provides protection against SQL injections.
 
+- - -
+
+However... there are two things you need to be aware of.
+
+#### Request Waterfalls
+
+A "waterfall" refers to a sequence of network requests that depend on the completion of previous requests. In the case of data fetching, each request can only begin once the previous request has returned data.
+
+This pattern is not necessarily bad. There may be cases where you want waterfalls because you want a condition to be satisfied before you make the next request. For example, you might want to fetch a user's ID and profile information first. Once you have the ID, you might then proceed to fetch their list of friends. In this case, each request is contingent on the data returned from the previous request.
+
+However, this behavior can also be unintentional and impact performance.
+
+#### Parallel data fetching
+
+A common way to avoid waterfalls is to initiate all data requests at the same time - in parallel.
+
+In JavaScript, you can use the `Promise.all()` or `Promise.allSettled()` functions to initiate all promises at the same time. 
+
+By using this pattern, you can:
++ Start executing all data fetches at the same time, which can lead to performance gains.
++ Use a native JavaScript pattern that can be applied to any library or framework.
+
+However, there is one disadvantage of relying only on this JavaScript pattern: what happens if one data request is slower than all the others?
+
+- - -
+
+## Static and Dynamic Rendering
+
+With **static rendering**, data fetching and rendering happens on the server at build time (when you deploy) or during [revalidation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#revalidating-data). The result can then be distributed and cached in a Content Delivery Network (CDN).
+
+> _Revalidation is the process of purging the Data Cache and re-fetching the latest data. This is useful when your data changes and you want to ensure you show the latest information._
+
+Whenever a user visits application, the cached result is served. There are a couple of benefits of static rendering:
++ **Faster Websites** - Prerendered content can be cached and globally distributed. This ensures that users around the world can access your website's content more quickly and reliably.
++ **Reduced Server Load** - Because the content is cached, your server does not have to dynamically generate content for each user request.
++ **SEO** - Prerendered content is easier for search engine crawlers to index, as the content is already available when the page loads. This can lead to improved search engine rankings.
+
+**Static rendering** is useful for UI with **no data** or **data that is shared across users**, such as a static blog post or a product page. It might not be a good fit for a dashboard that has personalized data that is regularly updated.
+
+With **dynamic rendering**, content is rendered on the server for each user at request time (when the user visits the page). There are a couple of benefits of dynamic rendering:
++ **Real-Time Data** - Dynamic rendering allows your application to display real-time or frequently updated data. This is ideal for applications where data changes often.
++ **User-Specific Content** - It's easier to serve personalized content, such as dashboards or user profiles, and update the data based on user interaction.
++ **Request Time Information** - Dynamic rendering allows you to access information that can only be known at request time, such as cookies or the URL search parameters.
+
+> By default, `@vercel/postgres` doesn't set its own caching semantics. This allows the framework to set its own static and dynamic behavior.
+
+You can use a Next.js API called `unstable_noStore` inside your Server Components or data fetching functions to opt out of static rendering.
+
+
+
+
+
+
 
 
 
