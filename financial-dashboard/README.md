@@ -238,11 +238,39 @@ With **dynamic rendering**, content is rendered on the server for each user at r
 
 You can use a Next.js API called `unstable_noStore` inside your Server Components or data fetching functions to opt out of static rendering.
 
+**With dynamic rendering, your application is only as fast as your slowest data fetch.**
 
+- - -
 
+## Streaming
 
+> Let's look at how you can improve the user experience when there are slow data requests.
 
+Streaming is a data transfer technique that allows you to break down a route into smaller "chunks" and progressively stream them from the server to the client as they become ready.
 
+By streaming, you can prevent slow data requests from blocking your whole page. This allows the user to see and interact with parts of the page without waiting for all the data to load before any UI can be shown to the user.
+
+> _Streaming works well with React's component model, as each component can be considered a chunk._
+
+There are two ways you implement streaming in Next.js:
+
+### Streaming a whole page with loading.tsx
+
+It is a special Next.js file built on top of Suspense, it allows you to create fallback UI to show as a replacement while page content loads.
+
+#### Adding loading skeletons
+
+It is a simplified version of the UI. Many websites use them as a placeholder (or fallback) to indicate to users that the content is loading. Any UI you embed into loading.tsx will be embedded as part of the static file, and sent first. Then, the rest of the dynamic content will be streamed from the server to the client.
+
+Route groups allow you to organize files into logical groups without affecting the URL path structure. When you create a new folder using parentheses `()`, the name won't be included in the URL path.
+
+> However, you can also use route groups to separate your application into sections (e.g. (marketing) routes and (shop) routes) or by teams for larger applications.
+
+#### Streaming a component
+
+You can be more granular and stream specific components using React Suspense.
+
+Suspense allows you to defer rendering parts of your application until some condition is met (e.g. data is loaded). You can wrap your dynamic components in Suspense. Then, pass it a fallback component to show while the dynamic component loads.
 
 
 
