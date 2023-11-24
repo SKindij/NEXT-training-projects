@@ -1,22 +1,17 @@
 # NEXT-training-projects
 
-* [Blog App](https://github.com/SKindij/NEXT-training-projects/tree/main/blog-app)
+## => [Financial Dashboard](https://github.com/SKindij/NEXT-training-projects/tree/main/financial-dashboard)
+
+  - implementation: https://nextjs-dashboard-tau-orpin.vercel.app/
+  - source: [nextjs.org/learn](https://nextjs.org/learn) course
+    
+## => [Blog App](https://github.com/SKindij/NEXT-training-projects/tree/main/blog-app)
+
+  - implementation:
+  - source: [NextJS 13 YouTube](https://www.youtube.com/playlist?list=PLiZoB8JBsdzlgeYHZDJ_orG0vy8JiEhKr) course
 
 
 
-> System Requirements: Node.js 18.17 or later.
-
-Automatic Installation: ``npx create-next-app@latest``
-```go
-  What is your project named? => my-next-app
-  Would you like to use TypeScript? => Yes
-  Would you like to use ESLint? => Yes
-  Would you like to use Tailwind CSS? => No
-  Would you like to use `src/` directory? => Yes
-  Would you like to use App Router? (recommended) => Yes
-  Would you like to customize the default import alias (@/*)? => No
-  What import alias would you like configured? @/*
-```
 
 
 
