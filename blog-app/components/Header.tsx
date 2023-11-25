@@ -1,14 +1,19 @@
-// components/Header.tsx
-import Link from "next/link";
+// @file: /app/components/Header.tsx
+import { Navigation } from "./Navigation";
 
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
+];
+
+// компонент із навігацією
 const Header = () => {
-    return (
-      <header className="container">
-        <Link href='/'>Home</Link>
-        <Link href='/blog'>Blog</Link>
-        <Link href='/about'>About</Link>
-      </header>
-    )
-}
+  return (
+    <header>
+      <Navigation navLinks={navItems} />
+    </header>
+  );
+};
 
-export {Header};
+export { Header };
