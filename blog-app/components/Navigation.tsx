@@ -2,6 +2,7 @@
 // @file: /app/components/Navigation.tsx
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 // типу для кожного пункту навігації
 type NavLink = {
@@ -16,6 +17,8 @@ type Props = {
 const Navigation = ({ navLinks }:Props) => {
   // хук для отримання поточного шляху (URL) сторінки
   const pathname = usePathname();
+  const session = useSession();
+  console.log(session);
 
   return (
     <>
@@ -37,6 +40,18 @@ const Navigation = ({ navLinks }:Props) => {
           </Link>
         );
       })}
+      {/* відображення посилання на профіль, якщо користувач увійшов в систему */}
+      {session?.data && <Link href="/profile">Profile</Link>}
+      {/* перевірка сесії користувача для відображення відповідних посилань */}
+      {session?.data ? (
+        // посилання для виходу з облікового запису активного користувача
+        <Link href="#" onClick={() => signOut({ callbackUrl: "/" })}>
+          Sign Out
+        </Link>
+      ) : (
+        // посилання для входу, якщо користувач не увійшов в систему
+        <Link href="/signin">SignIn</Link>
+      )}
     </>
   );
 };
