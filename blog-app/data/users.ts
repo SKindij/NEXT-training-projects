@@ -6,6 +6,8 @@ export const users = [
       name: "Robot",
       password: "werter1985",
       role: "admin",
+      image: "/cat-werter.jpg",
+      alt: "cat-werter"
     },
     {
       id: "102",
@@ -13,6 +15,8 @@ export const users = [
       name: "Barbarella",
       password: "space1968",
       role: "guest",
+      image: "/cat-barbarella.jpg",
+      alt: "cat-barbarella"
     },
     {
       id: "103",
@@ -20,5 +24,7 @@ export const users = [
       name: "Tracker",
       password: "busik1999",
       role: "guest",
+      image: "/animal-racker.jpg",
+      alt: "animal-racker"
     },
   ];
