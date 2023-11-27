@@ -1,24 +1,31 @@
 // @file: /app/lib/utils
 import { Revenue } from './definitions';
 
-export const formatCurrency = (amount: number) => {
+// повертає строкове представлення грошової суми в доларах США
+export const formatCurrency = (amount:number) => {
+  // для форматування числа в грошовий формат
   return (amount / 100).toLocaleString('en-US', {
     style: 'currency',
     currency: 'USD',
   });
 };
 
+// повертає дату у вигляді строки залежно від локалізації
 export const formatDateToLocal = (
-  dateStr: string,
-  locale: string = 'en-US',
+  dateStr:string,
+  locale:string = 'en-US',
 ) => {
+  // створюємо новий об'єкт Date з переданого рядка дати
   const date = new Date(dateStr);
+  // опції форматування дати в рядкове представлення
   const options: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   };
+  // створюємо об'єкт Intl.DateTimeFormat
   const formatter = new Intl.DateTimeFormat(locale, options);
+  // використовуємо створений форматер
   return formatter.format(date);
 };
 
@@ -38,28 +45,27 @@ export const generateYAxis = (revenue:Revenue[]) => {
   return { yAxisLabels, topLabel };
 };
 
-export const generatePagination = (currentPage: number, totalPages: number) => {
-  // If the total number of pages is 7 or less,
-  // display all pages without any ellipsis.
+// генерує масив для компонента пагінації
+export const generatePagination = (currentPage:number, totalPages:number) => {
+  // якщо загальна кількість сторінок <= 7, 
   if (totalPages <= 7) {
+    // повертаємо масив з усіма сторінками від 1 до totalPages
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-  // If the current page is among the first 3 pages,
-  // show the first 3, an ellipsis, and the last 2 pages.
+  // якщо поточна сторінка <= 3,
   if (currentPage <= 3) {
+    // показуємо перші три сторінки, '...' та останні дві сторінки
     return [1, 2, 3, '...', totalPages - 1, totalPages];
   }
 
-  // If the current page is among the last 3 pages,
-  // show the first 2, an ellipsis, and the last 3 pages.
+  // якщо поточна сторінка >= totalPages - 2,
   if (currentPage >= totalPages - 2) {
+    // показуємо перші дві сторінки, '...', та останні три сторінки.
     return [1, 2, '...', totalPages - 2, totalPages - 1, totalPages];
   }
 
-  // If the current page is somewhere in the middle,
-  // show the first page, an ellipsis, the current page and its neighbors,
-  // another ellipsis, and the last page.
+  // у всіх інших випадках показуємо
   return [
     1,
     '...',
