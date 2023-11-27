@@ -309,6 +309,53 @@ Search functionality will span the client and the server.
 3. Keep the URL in sync with the input field.
 4. Update the table to reflect the search query.
 
+#### defaultValue vs. value / Controlled vs. Uncontrolled
+> If you're using state to manage the value of an input, you'd use the value attribute to make it a controlled component. This means React would manage the input's state.
+> 
+> However, since you're not using state, you can use defaultValue. This means the native input will manage its own state. This is okay since you're saving the search query to the URL instead of state.
+
+#### When to use the useSearchParams() hook vs. the searchParams prop?
+You might have noticed you used two different ways to extract search params. Whether you use one or the other depends on whether you're working on the client or the server.
+* `<Search>` is a Client Component, so you used the `useSearchParams()` hook to access the params from the client.
+* `<Table>` is a Server Component that fetches its own data, so you can pass the `searchParams` prop from the page to the component.
+
+As a general rule, if you want to read the params from the client, use the `useSearchParams()` hook as this avoids having to go back to the server.
+
+#### Best practice: Debouncing
+
+Debouncing is a programming practice that limits the rate at which a function can fire. In our case, you only want to query the database when the user has stopped typing.
+
+**How Debouncing Works:**
+1. Trigger Event:
+     - When an event that should be debounced (like a keystroke in the search box) occurs, a timer starts.
+2. Wait:
+     - If a new event occurs before the timer expires, the timer is reset.
+3. Execution:
+     - If the timer reaches the end of its countdown, the debounced function is executed.
+
+To keep things simple, we'll use a library called [use-debounce](https://www.npmjs.com/package/use-debounce).
+
+### Adding pagination
+
+Adding pagination allows users to navigate through the different pages to view all the invoices. 
+
+> You don't want to fetch data on the client as this would expose your database secrets (remember, you're not using an API layer). Instead, you can fetch the data on the server, and pass it to the component as a prop.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
