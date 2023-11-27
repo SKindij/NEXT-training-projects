@@ -1,4 +1,5 @@
 // @file: /app/lib/data.ts
+import { unstable_noStore as noStore } from 'next/cache';
 // функція дозволяє робити запити до бази даних
 import { sql } from '@vercel/postgres';
 import {
@@ -9,13 +10,16 @@ import { formatCurrency } from './utils';
 
 // інфо з бази: доходи по місяцях
 export async function fetchRevenue() {
-  // Add noStore() here prevent the response from being cached.
-  // This is equivalent to in fetch(..., {cache: 'no-store'}).
-
+  // this prevent response from being cached
+  noStore();
+  // equivalent to in fetch(..., {cache: 'no-store'})
   try {
     console.log('Fetching Revenue data...');
+	await new Promise((resolve) => setTimeout(resolve, 2500));
     const data = await sql<Revenue>`SELECT * FROM revenue`;
+	console.log('Data fetch completed after 3 seconds.');
     console.log(data.rows.length); // => 12
+	
     // об'єкт type Revenue[місяць, дохід]
     return data.rows;
 	
@@ -27,6 +31,7 @@ export async function fetchRevenue() {
 
 // інфо з бази: останні 5 рахунків
 export async function fetchLatestInvoices() {
+  noStore();
   try {
     console.log('Fetching Latest Invoices data...');
     // SQL-запит з бази даних
@@ -53,6 +58,7 @@ export async function fetchLatestInvoices() {
 
 // інфо з бази: статистика по рахунках та клієнтах
 export async function fetchCardData() {
+  noStore();
   try {
     console.log('Fetching Cards Data...');
     // різні SQL-запити
@@ -87,15 +93,20 @@ export async function fetchCardData() {
   }
 }
 
-
+// кількість елементів на сторінці для пагінації
 const ITEMS_PER_PAGE = 6;
+// асинхронна функція, яка витягує відфільтровані рахунки з бази даних
 export async function fetchFilteredInvoices(
-  query: string,
-  currentPage: number,
+  query:string, // умова пошуку
+  currentPage:number, // поточна сторінка для пагінації
 ) {
+  // вимикаємо кешування результатів запиту
+  noStore();
+  // визначаємо зміщення для вибірки сторінки результатів
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
+    // виконуємо SQL-запит для витягування відфільтрованих рахунків
     const invoices = await sql<InvoicesTable>`
       SELECT
         invoices.id,
@@ -116,16 +127,21 @@ export async function fetchFilteredInvoices(
       ORDER BY invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
-
+    // повертаємо рядки результатів запиту
     return invoices.rows;
   } catch (error) {
+    // логуємо помилку бази даних та кидаємо новий виняток
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoices.');
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
+// приймає умови пошуку та повертає кількість сторінок для пагінації
+export async function fetchInvoicesPages(query:string) {
+  // вимикаємо кешування результатів запиту
+  noStore();
   try {
+    // SQL-запит для отримання кількості рахунків, які відповідають пошуку
     const count = await sql`SELECT COUNT(*)
     FROM invoices
     JOIN customers ON invoices.customer_id = customers.id
@@ -136,17 +152,22 @@ export async function fetchInvoicesPages(query: string) {
       invoices.date::text ILIKE ${`%${query}%`} OR
       invoices.status ILIKE ${`%${query}%`}
   `;
-
+    // обчислюємо загальну кількість сторінок
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {
+    // логуємо помилку бази даних та кидаємо новий виняток
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of invoices.');
   }
 }
 
+// приймає id рахунку та повертає відповідний рахунок
 export async function fetchInvoiceById(id: string) {
+  // вимикаємо кешування результатів запиту
+  noStore();
   try {
+     // виконуємо SQL-запит для отримання рахунку за його id
     const data = await sql<InvoiceForm>`
       SELECT
         invoices.id,
@@ -156,13 +177,13 @@ export async function fetchInvoiceById(id: string) {
       FROM invoices
       WHERE invoices.id = ${id};
     `;
-
-    const invoice = data.rows.map((invoice) => ({
+    // мапимо отримані дані...
+    const invoice = data.rows.map( (invoice) => ({
       ...invoice,
-      // Convert amount from cents to dollars
+      // та конвертуємо суму з центів у долари
       amount: invoice.amount / 100,
-    }));
-
+    }) );
+    // перший елемент масиву (зазвичай, це єдиний рахунок з вказаним id)
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -170,8 +191,10 @@ export async function fetchInvoiceById(id: string) {
   }
 }
 
+// отримує всіх клієнтів з бази даних
 export async function fetchCustomers() {
   try {
+    // отримання всіх клієнтів, відсортованих за іменем
     const data = await sql<CustomerField>`
       SELECT
         id,
@@ -179,7 +202,7 @@ export async function fetchCustomers() {
       FROM customers
       ORDER BY name ASC
     `;
-
+    // масив клієнтів, отриманих з бази даних
     const customers = data.rows;
     return customers;
   } catch (err) {
@@ -188,7 +211,9 @@ export async function fetchCustomers() {
   }
 }
 
+//
 export async function fetchFilteredCustomers(query: string) {
+  noStore();
   try {
     const data = await sql<CustomersTable>`
 		SELECT
