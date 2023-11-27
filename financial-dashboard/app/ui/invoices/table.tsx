@@ -1,23 +1,25 @@
+// @ file: /app/ui/invoices/table.tsx
 import Image from 'next/image';
+// необхідні залежності та утиліти для компонента таблиці рахунків
 import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredInvoices } from '@/app/lib/data';
 
-export default async function InvoicesTable({
-  query,
-  currentPage,
-}: {
-  query: string;
-  currentPage: number;
+// асинхронний компонент, який приймає запит пошуку та номер сторінки для пагінації
+export default async function InvoicesTable( {query, currentPage}: {
+  query:string;
+  currentPage:number;
 }) {
+  // отримання відфільтрованих рахунків з бази даних
   const invoices = await fetchFilteredInvoices(query, currentPage);
 
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="md:hidden">
+		  {/* відображення для мобільних пристроїв */}
+          <div className="md:hidden">	    
             {invoices?.map((invoice) => (
               <div
                 key={invoice.id}
@@ -54,8 +56,10 @@ export default async function InvoicesTable({
               </div>
             ))}
           </div>
-          <table className="hidden min-w-full text-gray-900 md:table">
-            <thead className="rounded-lg text-left text-sm font-normal">
+		  {/* таблиця для планшетів і великих екранів */}
+          <table className="hidden min-w-full text-gray-900 md:table">            
+			{/* заголовки стовпців таблиці */}
+			<thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Customer
@@ -77,6 +81,7 @@ export default async function InvoicesTable({
                 </th>
               </tr>
             </thead>
+			{/* виведення рахунків у вигляді рядків таблиці */}
             <tbody className="bg-white">
               {invoices?.map((invoice) => (
                 <tr
@@ -85,11 +90,10 @@ export default async function InvoicesTable({
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
-                      <Image
-                        src={invoice.image_url}
+                      <Image src={invoice.image_url}
                         className="rounded-full"
-                        width={28}
-                        height={28}
+                        width={28} height={28}
+						alt="invoice img"
                       />
                       <p>{invoice.name}</p>
                     </div>
