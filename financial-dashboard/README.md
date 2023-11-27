@@ -272,6 +272,45 @@ You can be more granular and stream specific components using React Suspense.
 
 Suspense allows you to defer rendering parts of your application until some condition is met (e.g. data is loaded). You can wrap your dynamic components in Suspense. Then, pass it a fallback component to show while the dynamic component loads.
 
+- - -
+
+## Search and Pagination
+
+> * `<Search/>` allows users to search for specific invoices.
+> * `<Pagination/>` allows users to navigate between pages of invoices.
+> * `<Table/>` displays the invoices.
+
+Search functionality will span the client and the server.
+> When a user searches for an invoice on the client, the URL params will be updated, data will be fetched on the server, and the table will re-render on the server with the new data.
+
+#### There are a couple of benefits of implementing search with URL params:
++ **Bookmarkable and Shareable URLs:**
+  - Since the search parameters are in the URL, users can bookmark the current state of the application, including their search queries and filters, for future reference or sharing.
++ **Server-Side Rendering and Initial Load:**
+  - URL parameters can be directly consumed on the server to render the initial state, making it easier to handle server rendering.
++ **Analytics and Tracking:**
+  - Having search queries and filters directly in the URL makes it easier to track user behavior without requiring additional client-side logic.
+
+### client hooks to implement the search functionality:
++ **useSearchParams**
+  - allows you to access the parameters of the current URL. 
+  - search params for this URL `/dashboard/invoices?page=1&query=pending` would look like this: `{page: '1', query: 'pending'}`.
+  - provides utility methods for manipulating the URL query parameters
++ **usePathname**
+  - Lets you read the current URL's pathname.
+  - for route `/dashboard/invoices`, usePathname would return `'/dashboard/invoices'`.
++ **useRouter**
+  - Enables navigation between routes within client components programmatically. 
+  - There are [multiple methods](https://nextjs.org/docs/app/api-reference/functions/use-router#userouter) you can use.
+
+#### Quick overview of the implementation steps:
+1. Capture the user's input.
+2. Update the URL with the search params.
+3. Keep the URL in sync with the input field.
+4. Update the table to reflect the search query.
+
+
+
 
 
 
