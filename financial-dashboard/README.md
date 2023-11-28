@@ -382,8 +382,44 @@ Server Actions are also deeply integrated with Next.js [caching](https://nextjs.
 5. Insert the data and handle any errors.
 6. Revalidate the cache and redirect the user back to invoices page.
 
+> By adding the `'use server'`, you mark all the exported functions within the file as server functions. These server functions can then be imported into Client and Server components, making them extremely versatile.
 
+#### Good to know: 
+In HTML, you'd pass a URL to the `action` attribute. This URL would be the destination where your form data should be submitted (usually an API endpoint).
 
+However, in React, the `action` attribute is considered a special prop - meaning React builds on top of it to allow actions to be invoked.
+
+Behind the scenes, Server Actions create a `POST` API endpoint. This is why you don't need to create API endpoints manually when using Server Actions.
+
+You'll need to extract the values of `formData`, there are a couple of [methods](https://developer.mozilla.org/en-US/docs/Web/API/FormData/append) you can use. 
+
+> **Tip:** If you're working with `forms` that have many fields, you may want to consider using the [`entries()`](https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries) method with JavaScript's [`Object.fromEntries()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries).\
+> For example:\
+> ``const rawFormData = Object.fromEntries(formData.entries())``
+
+_Now that your data is in the shape of an object, it'll be much easier to work with._
+
+#### Type validation and coercion
+Before sending the `form data` to your database, you want to ensure it's in the correct format and with the correct types. 
+
+You'll notice that amount is of type `string` and not `number`. This is because `input` elements with `type="number"` actually return a string, not a number!
+
+To handle type validation, you have a few options. While you can manually validate `types`, using a type validation library can save you time and effort. For your example, we'll use [Zod](https://zod.dev/), a TypeScript-first validation library that can simplify this task for you.
+
+> It's usually good practice to store monetary values in cents in your database to eliminate JavaScript floating-point errors and ensure greater accuracy.
+
+Now that you have all the values you need for your database, you can create an SQL query to insert the new invoice into your database and pass in the variables.
+
+Next.js has a **Client-side Router Cache** that stores the route segments in the user's browser for a time. Along with prefetching, this cache ensures that users can quickly navigate between routes while reducing the number of requests made to the server.
+
+> Since you're updating the data displayed in the invoices route, you want to clear this cache and trigger a new request to the server. You can do this with the `revalidatePath` function from Next.js.
+
+#### Update an invoice:
+1. Create a new dynamic route segment with the invoice id.
+2. Read the invoice id from the page params.
+3. Fetch the specific invoice from your database.
+4. Pre-populate the form with the invoice data.
+5. Update the invoice data in your database.
 
 
 
