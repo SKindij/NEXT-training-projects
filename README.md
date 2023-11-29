@@ -4,11 +4,16 @@
 
   - implementation: https://nextjs-dashboard-tau-orpin.vercel.app/
   - source: [nextjs.org/learn](https://nextjs.org/learn) course
+
+## => [Book It App](https://github.com/SKindij/NEXT-training-projects/tree/main/book-it-app)
+
+  - implementation: 
+  - source: [Build Full Stack Apps with Next.js & TypeScript](https://www.udemy.com/course/nextjs-build-full-stack-apps-with-nextjs-using-redux/) Udemy course
     
 ## => [Blog App](https://github.com/SKindij/NEXT-training-projects/tree/main/blog-app)
 
   - implementation:
-  - source: [NextJS 13 YouTube](https://www.youtube.com/playlist?list=PLiZoB8JBsdzlgeYHZDJ_orG0vy8JiEhKr) course
+  - source: [NextJS 13 app](https://www.youtube.com/playlist?list=PLiZoB8JBsdzlgeYHZDJ_orG0vy8JiEhKr) YouTube course
 
 
 - - -
