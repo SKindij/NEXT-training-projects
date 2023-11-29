@@ -416,9 +416,19 @@ Next.js has a **Client-side Router Cache** that stores the route segments in the
 
 #### Update an invoice:
 1. Create a new dynamic route segment with the invoice id.
+    - [Dynamic Segment](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes) can be created by wrapping a folder's name in square brackets: `[folderName]`.
+    - For example, `[id]`, `[post]` or `[slug]`.
+    - Dynamic Segments are passed as the params prop to `layout`, `page`, `route`, and `generateMetadata` functions.
 2. Read the invoice id from the page params.
+    - In addition to `searchParams`, page components also accept a prop called `params` which you can use to access the `id`.
+    - Update your `<Page>` component to receive the prop.
 3. Fetch the specific invoice from your database.
+    - Import a new function called `fetchInvoiceById` and pass the `id` as an argument.
+    - Import `fetchCustomers` to fetch the customer names for the dropdown.
+    - You can use `Promise.all` to fetch both in parallel.
 4. Pre-populate the form with the invoice data.
+    - Lastly, you want to pass the `id` to the Server Action so you can update the right record in your database.
+    - You can pass `id` to the Server Action using JS `bind`. This will ensure that any values passed to the Server Action are encoded.
 5. Update the invoice data in your database.
 
 
