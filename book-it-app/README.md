@@ -33,6 +33,38 @@ Then, create an empty config file to let editors and other tools know you are us
 
 
 
+### 📚 The project structure (architecture):
+
+```go
+📁 Book-It-App/
+│
+├─ package.json
+├─ next.config.js
+├─ next-env.d.ts
+│
+├─ 📁 app/
+│   ├─ globals.css
+│   ├─ layout.tsx
+│   ├─ page.tsx
+│   ├─ page.module.css
+│   ├─ 📁 api/
+│   │   ├─ 📁 admin/
+│   │   │
+│   │   │
+│   │   │
+│   │   ├─ 📁 rooms/
+│   │
+│   │
+│   ├─ 📁 backend/
+│
+│
+│
+│
+
+
+
+```
+
 
 
 ### Getting Started
