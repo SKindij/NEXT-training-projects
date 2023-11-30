@@ -36,32 +36,44 @@ Then, create an empty config file to let editors and other tools know you are us
 ### 📚 The project structure (architecture):
 
 ```go
-📁 Book-It-App/
+📁Book-It-App/
 │
 ├─ package.json
 ├─ next.config.js
 ├─ next-env.d.ts
 │
-├─ 📁 app/
+├─ 📁app/
 │   ├─ globals.css
 │   ├─ layout.tsx
 │   ├─ page.tsx
 │   ├─ page.module.css
-│   ├─ 📁 api/
-│   │   ├─ 📁 admin/
-│   │   │
-│   │   │
-│   │   │
-│   │   ├─ 📁 rooms/
-│   │
-│   │
-│   ├─ 📁 backend/
+│   ├─ 📁api/
+│   │   ├─ 📁admin/
+│   │   │   ├─ route.ts
+│   │   │   └─ 📁[id]
+│   │   │       └─ route.ts
+│   │   └─ 📁rooms/
+│   │       ├─ route.ts
+│   │       └─ 📁[id]
+│   │           └─ route.ts
+│   ├─ 📁
 │
+├─ 📁backend/
+│   ├─ 📁config/
+│   │   └─ dbConnect.ts
+│   ├─ 📁controllers/
+│   │   └─ roomControllers.ts
+│   ├─ 📁middlewares/
+│   │   └─ catchAsyncErrors.ts
+│   ├─ 📁models/
+│   │   └─ room.ts
+│   └─ 📁utils/
+│      └─ errorHandler.ts
+├─ 📁public/
 │
-│
-│
-
-
+└─ 📁seeder/
+    ├─ data.ts
+    └─ seeder.ts
 
 ```
 
