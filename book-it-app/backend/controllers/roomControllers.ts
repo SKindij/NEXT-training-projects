@@ -3,7 +3,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Room from "../models/room";
 
-// Get all rooms  =>  /api/rooms
+// @desc: Get all rooms  
+// @route: GET /api/rooms
+// @access: Public
 export const allRooms = async (req:NextRequest) => {
   // кількість кімнат на сторінку
   const resPerPage:number = 8;
@@ -17,7 +19,9 @@ export const allRooms = async (req:NextRequest) => {
   });
 };
 
-// Create new room  =>  /api/admin/rooms
+// @desc: Create new room 
+// @route: POST /api/admin/rooms
+// @access: Admin
 export const newRoom = async (req:NextRequest) => {
   // отримуємо дані для нової кімнати з запиту
   const body = await req.json();
@@ -30,7 +34,9 @@ export const newRoom = async (req:NextRequest) => {
   });
 };
 
-// Get room details  =>  /api/rooms/:id
+// @desc: Get room details  
+// @route: GET /api/rooms/:id
+// @access: Public
 export const getRoomDetails = async (
   req:NextRequest, {params}:{params: { id:string }}
 ) => {
@@ -50,7 +56,9 @@ export const getRoomDetails = async (
   });
 };
 
-// Update room details  =>  /api/admin/rooms/:id
+// @desc: Update room details
+// @route: PUT /api/admin/rooms/:id
+// @access: Admin
 export const updateRoom = async (
   req:NextRequest, {params}:{params: { id:string }}
 ) => {
@@ -76,7 +84,9 @@ export const updateRoom = async (
   });
 };
 
-// Delete room details  =>  /api/admin/rooms/:id
+// @desc: Delete room details
+// @route: DELETE /api/admin/rooms/:id
+// @access: Admin
 export const deleteRoom = async (
   req:NextRequest, {params}:{params: { id:string }}
 ) => {
