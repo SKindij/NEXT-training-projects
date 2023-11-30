@@ -49,9 +49,10 @@ Then, create an empty config file to let editors and other tools know you are us
 │   ├─ page.module.css
 │   ├─ 📁api/
 │   │   ├─ 📁admin/
-│   │   │   ├─ route.ts
-│   │   │   └─ 📁[id]
-│   │   │       └─ route.ts
+│   │   │   └─ 📁rooms/
+│   │   │       ├─ route.ts
+│   │   │       └─ 📁[id]
+│   │   │           └─ route.ts
 │   │   └─ 📁rooms/
 │   │       ├─ route.ts
 │   │       └─ 📁[id]
