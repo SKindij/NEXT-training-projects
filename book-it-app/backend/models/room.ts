@@ -1,17 +1,32 @@
 // @path: @backend/models/room.ts
 import mongoose, { Schema, Document } from "mongoose";
+/*
+ Document - використовується для представлення документів, збережених у базі даних.
+ Кожен документ в колекції MongoDB може бути представлений об'єктом, який реалізує інтерфейс Document.
 
+ Schema - це клас, який дозволяє визначати структуру документа для колекції в MongoDB.
+ Визначення схеми допомагає встановити, як дані мають зберігатися та виводитися.
+*/
+
+// Інтерфейс для зображень кімнати
 export interface IImage extends Document {
   public_id:string;
   url:string;
 }
-
+// Інтерфейс для відгуків про кімнату
 export interface IReview extends Document {
   user:mongoose.Schema.Types.ObjectId;
   rating:number;
   comment:string;
 }
+/*
+ Використовуючи extends Document, ми позначаємо, що цей інтерфейс
+ буде представляти документ, який може бути збережений в MongoDB.
+ TypeScript розуміє, що цей інтерфейс може містити додаткові методи та властивості Mongoose для роботи. 
+ Наприклад, методи для збереження документа в базі даних, оновлення, видалення тощо.
+*/
 
+// Інтерфейс для розташування кімнати
 export interface ILocation {
   type:string;
   coordinates:number[];
@@ -22,6 +37,7 @@ export interface ILocation {
   country:string;
 }
 
+// Інтерфейс для об'єкту кімнати
 export interface IRoom extends Document {
   name:string;
   description:string;
@@ -29,6 +45,7 @@ export interface IRoom extends Document {
   address:string;
   location:ILocation;
   guestCapacity:number;
+  numOfBeds:number;
   isInternet:boolean;
   isBreakfast:boolean;
   isAirConditioned:boolean;
@@ -43,16 +60,17 @@ export interface IRoom extends Document {
   createdAt:Date;
 }
 
-const roomSchema: Schema = new Schema({
+// Схема для кімнати
+const roomSchema:Schema = new Schema({
   name: {
     type: String,
     required: [true, "Please enter room name"],
     trim: true,
-    maxLength: [200, "Room name cannot exceed 100 characters"],
+    maxLength: [100, "Room name cannot exceed 100 characters"],
   },
   description: {
     type: String,
-    required: [true, "Please enter room name"],
+    required: [true, "Please enter room description"],
   },
   pricePerNight: {
     type: Number,
@@ -162,5 +180,24 @@ const roomSchema: Schema = new Schema({
   },
 });
 
-export default mongoose.models.Room ||
+// Експортуємо модель кімнати
+export default mongoose.models["Room"] ||
   mongoose.model<IRoom>("Room", roomSchema);
+
+/* нотатки
+ required: [true, "Please enter room name"],
+  - вказує, що це поле є обов'язковим для заповнення
+  - інакше генерується помилка з повідомленням 
+
+
+
+
+
+
+
+
+*/
+
+
+
+
