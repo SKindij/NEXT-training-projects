@@ -4,9 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 import Room from "../models/room";
 
 // Get all rooms  =>  /api/rooms
-export const allRooms = async (req: NextRequest) => {
-  const resPerPage: number = 8;
-
+export const allRooms = async (req:NextRequest) => {
+  // кількість кімнат на сторінку
+  const resPerPage:number = 8;
+  // отримуємо всі кімнати з бази даних
   const rooms = await Room.find();
 
   return NextResponse.json({
@@ -17,9 +18,10 @@ export const allRooms = async (req: NextRequest) => {
 };
 
 // Create new room  =>  /api/admin/rooms
-export const newRoom = async (req: NextRequest) => {
+export const newRoom = async (req:NextRequest) => {
+  // отримуємо дані для нової кімнати з запиту
   const body = await req.json();
-
+  // створюємо нову кімнату в базі даних
   const room = await Room.create(body);
 
   return NextResponse.json({
@@ -30,16 +32,14 @@ export const newRoom = async (req: NextRequest) => {
 
 // Get room details  =>  /api/rooms/:id
 export const getRoomDetails = async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  req:NextRequest, {params}:{params: { id:string }}
 ) => {
+  // знаходимо кімнату за її ідентифікатором
   const room = await Room.findById(params.id);
 
   if (!room) {
     return NextResponse.json(
-      {
-        message: "Room not found",
-      },
+      { message: "Room not found" },
       { status: 404 }
     );
   }
@@ -52,24 +52,23 @@ export const getRoomDetails = async (
 
 // Update room details  =>  /api/admin/rooms/:id
 export const updateRoom = async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  req:NextRequest, {params}:{params: { id:string }}
 ) => {
+  // знаходимо кімнату за її ідентифікатором
   let room = await Room.findById(params.id);
+  // отримуємо дані для оновлення кімнати з запиту
   const body = await req.json();
 
   if (!room) {
     return NextResponse.json(
-      {
-        message: "Room not found",
-      },
+      { message: "Room not found" },
       { status: 404 }
     );
   }
-
-  room = await Room.findByIdAndUpdate(params.id, body, {
-    new: true,
-  });
+  // оновлюємо кімнату в базі даних
+  room = await Room.findByIdAndUpdate(
+    params.id, body, {new: true}
+  );
 
   return NextResponse.json({
     success: true,
@@ -79,9 +78,9 @@ export const updateRoom = async (
 
 // Delete room details  =>  /api/admin/rooms/:id
 export const deleteRoom = async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  req:NextRequest, {params}:{params: { id:string }}
 ) => {
+  // знаходимо кімнату за її ідентифікатором
   const room = await Room.findById(params.id);
 
   if (!room) {
@@ -93,8 +92,9 @@ export const deleteRoom = async (
     );
   }
 
-  // TODO - Delete images associated with the room
+  // TODO - видалити зображення, пов'язані з кімнатою
 
+  // видаляємо кімнату з бази даних
   await room.deleteOne();
 
   return NextResponse.json({
