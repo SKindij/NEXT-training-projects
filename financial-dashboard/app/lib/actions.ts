@@ -36,11 +36,18 @@ export async function createInvoice(formData:FormData) {
   const date = new Date().toISOString().split('T')[0];
   // test it out:
   console.log(`amountInCents: ${amountInCents} on ${date}.`);
-  // використовуємо sql-запит для вставки нового рахунку в базу даних
-  await sql`
-    INSERT INTO invoices (customer_id, amount, status, date)
-    VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-  `;
+  try {
+    // використовуємо sql-запит для вставки нового рахунку в базу даних
+    await sql`
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+    `;
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    };
+  }
+  
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
 }
@@ -57,12 +64,16 @@ export async function updateInvoice(id:string, formData:FormData) {
   });
   // переводимо суму рахунку з доларів в центи
   const amountInCents = amount * 100;
-  // використовуємо sql-запит для оновлення в базу даних
-  await sql`
-    UPDATE invoices
-    SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-    WHERE id = ${id}
-  `;
+  try {
+    // використовуємо sql-запит для оновлення в базу даних
+    await sql`
+      UPDATE invoices
+      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update Invoice.' };
+  }
   // для перевалідації шляху та перенаправлення на потрібну сторінку
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
@@ -70,7 +81,12 @@ export async function updateInvoice(id:string, formData:FormData) {
 
 
 export async function deleteInvoice(id:string) {
-  await sql`DELETE FROM invoices WHERE id = ${id}`;
-  // ініціює новий запит на сервер і повторно відтворить таблицю
-  revalidatePath('/dashboard/invoices');
+  try {
+    await sql`DELETE FROM invoices WHERE id = ${id}`;
+    // ініціює новий запит на сервер і повторно відтворить таблицю
+    revalidatePath('/dashboard/invoices');
+	return { message: 'Deleted Invoice.' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Invoice.' };
+  }	
 }
