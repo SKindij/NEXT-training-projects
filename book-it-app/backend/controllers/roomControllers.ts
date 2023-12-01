@@ -2,11 +2,13 @@
 // модулі для обробки запитів та відповідей
 import { NextRequest, NextResponse } from "next/server";
 import Room from "../models/room";
+import ErrorHandler from "../utils/errorHandler";
+import { catchAsyncErrors } from "../middlewares/catchAsyncErrors";
 
 // @desc: Get all rooms  
 // @route: GET /api/rooms
 // @access: Public
-export const allRooms = async (req:NextRequest) => {
+export const allRooms = catchAsyncErrors(async (req:NextRequest) => {
   // кількість кімнат на сторінку
   const resPerPage:number = 8;
   // отримуємо всі кімнати з бази даних
@@ -17,12 +19,12 @@ export const allRooms = async (req:NextRequest) => {
     resPerPage,
     rooms,
   });
-};
+});
 
 // @desc: Create new room 
 // @route: POST /api/admin/rooms
 // @access: Admin
-export const newRoom = async (req:NextRequest) => {
+export const newRoom = catchAsyncErrors(async (req:NextRequest) => {
   // отримуємо дані для нової кімнати з запиту
   const body = await req.json();
   // створюємо нову кімнату в базі даних
@@ -32,34 +34,31 @@ export const newRoom = async (req:NextRequest) => {
     success: true,
     room,
   });
-};
+});
 
 // @desc: Get room details  
 // @route: GET /api/rooms/:id
 // @access: Public
-export const getRoomDetails = async (
+export const getRoomDetails = catchAsyncErrors(async (
   req:NextRequest, {params}:{params: { id:string }}
 ) => {
   // знаходимо кімнату за її ідентифікатором
   const room = await Room.findById(params.id);
 
   if (!room) {
-    return NextResponse.json(
-      { message: "Room not found" },
-      { status: 404 }
-    );
+    throw new ErrorHandler("Room not found", 404);
   }
 
   return NextResponse.json({
     success: true,
     room,
   });
-};
+});
 
 // @desc: Update room details
 // @route: PUT /api/admin/rooms/:id
 // @access: Admin
-export const updateRoom = async (
+export const updateRoom = catchAsyncErrors(async (
   req:NextRequest, {params}:{params: { id:string }}
 ) => {
   // знаходимо кімнату за її ідентифікатором
@@ -68,10 +67,7 @@ export const updateRoom = async (
   const body = await req.json();
 
   if (!room) {
-    return NextResponse.json(
-      { message: "Room not found" },
-      { status: 404 }
-    );
+    throw new ErrorHandler("Room not found", 404);
   }
   // оновлюємо кімнату в базі даних
   room = await Room.findByIdAndUpdate(
@@ -82,24 +78,19 @@ export const updateRoom = async (
     success: true,
     room,
   });
-};
+});
 
 // @desc: Delete room details
 // @route: DELETE /api/admin/rooms/:id
 // @access: Admin
-export const deleteRoom = async (
+export const deleteRoom = catchAsyncErrors(async (
   req:NextRequest, {params}:{params: { id:string }}
 ) => {
   // знаходимо кімнату за її ідентифікатором
   const room = await Room.findById(params.id);
 
   if (!room) {
-    return NextResponse.json(
-      {
-        message: "Room not found",
-      },
-      { status: 404 }
-    );
+    throw new ErrorHandler("Room not found", 404);
   }
 
   // TODO - видалити зображення, пов'язані з кімнатою
@@ -110,4 +101,4 @@ export const deleteRoom = async (
   return NextResponse.json({
     success: true,
   });
-};
+});
