@@ -432,6 +432,45 @@ Next.js has a **Client-side Router Cache** that stores the route segments in the
 5. Update the invoice data in your database.
 
 
+### Handling all errors
+
+The **error.tsx** file can be used to define a UI boundary for a route segment. It serves as a **catch-all** for unexpected errors and allows you to display a fallback UI to your users.
+
+There are a few things you'll notice:
+* `error`:
+  - This object is an instance of JavaScript's native Error object.
+* `reset`:
+  - This is a function to reset the error boundary.
+  - When executed, the function will try to re-render the route segment.
+
+Another way you can handle errors gracefully is by using the `notFound` function. While **error.tsx** is useful for catching **all** errors, `notFound` can be used when you try to fetch a resource that doesn't exist.
+
+To show an error UI to the user. Create a **not-found.tsx** file inside the folder.
+
+That's something to keep in mind, **notFound.tsx** will take precedence over **error.tsx**, so you can reach out for it when you want to handle more specific errors!
+
+### Improving Accessibility
+
+Accessibility refers to designing and implementing web applications that everyone can use, including those with disabilities. It's a vast topic that covers many areas, such as keyboard navigation, semantic HTML, images, colors, videos, etc.
+
+By default, Next.js includes the `eslint-plugin-jsx-a11y` plugin to help catch accessibility issues early.
+
+Add next lint as a script in your package.json file: `"lint": "next lint"`.\
+Then run `npm run lint` in your terminal.\
+You should see the following warning: `No ESLint warnings or errors`.
+
+#### Form validation
+
+There are a couple of ways you can validate forms on the client. The simplest would be to rely on the form validation provided by the browser by adding the `required` attribute to the `<input>` and `<select>` elements in your forms. 
+
+An alternative to client-side validation is server-side validation.
++ Ensure your data is in the expected format before sending it to your database.
++ Reduce the risk of malicious users bypassing client-side validation.
++ Have one source of truth for what is considered valid data.
+
+Inside your **Form Component**, the `useFormState` hook:
+- Takes two arguments: `(action, initialState)`.
+- Returns two values: `[state, dispatch]` - the form state, and a dispatch function (similar to useReducer).
 
 
 
