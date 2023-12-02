@@ -1,21 +1,42 @@
 // @path: @/backend/controllers/roomControllers.ts
 // модулі для обробки запитів та відповідей
 import { NextRequest, NextResponse } from "next/server";
-import Room from "../models/room";
+import Room, { IRoom } from "../models/room";
 import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors";
+import APIFilters from "../utils/apiFilters";
 
 // @desc: Get all rooms  
 // @route: GET /api/rooms
 // @access: Public
 export const allRooms = catchAsyncErrors(async (req:NextRequest) => {
   // кількість кімнат на сторінку
-  const resPerPage:number = 8;
-  // отримуємо всі кімнати з бази даних
-  const rooms = await Room.find();
+  const resPerPage:number = 4;
+  // параметри пошуку з URL-адреси запиту
+  const { searchParams } = new URL(req.url);
+  // об'єкт для зберігання параметрів пошуку
+  const queryStr:any = {};
+  // проходження по всім параметрам пошуку та їх збереження
+  searchParams.forEach((value, key) => {
+    queryStr[key] = value;
+  });
+  // отримання загальної кількості кімнат у базі даних
+  const roomsCount:number = await Room.countDocuments();
+  // інстанціювання об'єкта для фільтрації кімнат
+  const apiFilters = new APIFilters(Room, queryStr).search().filter();
+  // отримання першої порції кімнат відповідно до вказаних фільтрів
+  let rooms:IRoom[] = await apiFilters.query;
+  // отримання кількості кімнат після фільтрації
+  const filteredRoomsCount:number = rooms.length;
+  // застосування пагінації до отриманих кімнат
+  apiFilters.pagination(resPerPage);
+  // клонування фільтрованого запиту для отримання сторінок кімнат
+  rooms = await apiFilters.query.clone();
 
   return NextResponse.json({
     success: true,
+    roomsCount,
+    filteredRoomsCount,
     resPerPage,
     rooms,
   });
