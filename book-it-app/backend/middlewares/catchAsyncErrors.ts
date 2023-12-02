@@ -16,15 +16,20 @@ export const catchAsyncErrors =
       return await handler(req, params);
     // обробка помилок на основі їх типів
     } catch (error:any) {
-      // якщо є помилка приведення типів (наприклад, ID невірного формату)
+      /* у бібліотеці Mongoose
+        помилка "CastError" виникає, коли відбувається 
+        невдала спроба конвертувати або знайти певне значення
+      */
       if (error?.name === "CastError") {
+        // ${error?.path} - шлях до поля, яке стало причиною помилки
         error.message = `Resource not found. Invalid ${error?.path}`;
         error.statusCode = 400;
       }
       // якщо є помилка валідації (наприклад, неправильні дані в запиті)
       if (error?.name === "ValidationError") {
-        // отримання всіх повідомлень про помилки валідації
+        // отримання масиву [повідомлень про помилки валідації]
         error.message = Object.values<IValidationError>(error.errors).map(
+          // вказує на неправильні дані, передані користувачем
           (value) => value.message
         );
         error.statusCode = 400;
