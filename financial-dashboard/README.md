@@ -472,6 +472,38 @@ Inside your **Form Component**, the `useFormState` hook:
 - Takes two arguments: `(action, initialState)`.
 - Returns two values: `[state, dispatch]` - the form state, and a dispatch function (similar to useReducer).
 
+- - -
+
+## Authentication vs. Authorization
+
+In web development, authentication and authorization serve different roles:
++ **Authentication** is about making sure the user is who they say they are. You're proving your identity with something you have like a username and password.
++ **Authorization** is the next step. Once a user's identity is confirmed, authorization decides what parts of the application they are allowed to use.
+
+> So, authentication checks who you are, and authorization determines what you can do or access in the application.
+
+### NextAuth.js
+
+_It abstracts away much of the complexity involved in managing sessions, sign-in and sign-out, and other aspects of authentication. While you can manually implement these features, the process can be time-consuming and error-prone. NextAuth.js simplifies the process, providing a unified solution for auth in Next.js applications._
+
+Install NextAuth.js by running the following command in your terminal:\
+``npm install next-auth@beta``.
+
+> You're installing the beta version of NextAuth.js, which is compatible with Next.js 14.
+
+Next, generate a secret key for your application. This key is used to encrypt cookies, ensuring the security of user sessions.\
+You can do this by running the following command in your terminal:\
+``openssl rand -base64 32``
+
+Then, in your **.env** file, add your generated key to the `AUTH_SECRET` variable:\
+``AUTH_SECRET=your-secret-key``
+
+For auth to work in production, you'll need to update your environment variables in your Vercel project too. Check out this [guide](https://vercel.com/docs/projects/environment-variables) on how to add environment variables on Vercel.
+
+
+
+
+
 
 
 
