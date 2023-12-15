@@ -1,6 +1,7 @@
 // index.d.ts
 // це файл TypeScript-оголошень (TypeScript declaration file)
 declare module "react-star-ratings";
+declare module "react-js-pagination";
 
 /* 
   Цей файл використовується для визначення типів або декларацій для бібліотеки чи модуля, 
