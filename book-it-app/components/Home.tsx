@@ -3,6 +3,11 @@ import React from "react";
 import RoomItem from "./room/RoomItem";
 // інтерфейс IRoom для типізації даних
 import { IRoom } from "@/backend/models/room";
+
+import CustomPagination from "./layout/CustomPagination";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
 // Інтерфейс для типів властивостей компонента
 interface Props {
   data: {
@@ -16,16 +21,25 @@ interface Props {
 const Home = ({ data }: Props) => {
   // розпаковуємо дані з об'єкта props
   const { rooms, resPerPage, filteredRoomsCount } = data;
+
+  const searchParams = useSearchParams();
+  const location = searchParams.get("location");
+
   return (
     <div>
       {/* секція зі списком кімнат */}
       <section id="rooms" className="container mt-5">
         {/* заголовок секції. */}
-        <h2 className="mb-3 ml-2 stays-heading">All Rooms</h2>
+        <h2 className="mb-3 ml-2 stays-heading">
+          {location
+            ? `${rooms?.length} rooms found in ${location}`
+            : "All Rooms"
+          }
+        </h2>
         {/* посилання для повернення до сторінки пошуку */}
-        <a href="/search" className="ml-2 back-to-search">
-          <i className="fa fa-arrow-left"></i> Back to Search
-        </a>
+        <Link href="/search" className="ml-2 back-to-search">
+          <i className="fa fa-arrow-left me-1"></i> Back to Search
+        </Link>
         {/* для відображення кімнат */}
         <div className="row mt-4">
           {rooms?.length === 0 ? (
@@ -37,6 +51,11 @@ const Home = ({ data }: Props) => {
           )}
         </div>
       </section>
+
+      <CustomPagination
+        resPerPage={resPerPage}
+        filteredRoomsCount={filteredRoomsCount}
+      />
     </div>
   );
 };
